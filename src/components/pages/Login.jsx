@@ -1,49 +1,47 @@
 import React, { useState } from 'react';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
-import { signInWithEmailAndPassword } from "firebase/auth";
+
+export const Login = () => {
+  let navigate = useNavigate()
+
+  const [email, setEmail] = useState()
+  const [password, setPassword] = useState()
+
+const SubmitHandler =()=>{
+  const localData = localStorage.getItem("data")
+ const localStorageData = JSON.parse(localData)
+ 
+  console.log(localStorageData.email)
+  console.log("password",localStorageData.password)
+
+  const data={
+    email:email,
+    password:password
+  }
+
+  if (data.email == localStorageData.email && data.password == localStorageData.password){
+    // navigate to movies page 
+    navigate("/Todo")
 
 
+    Swal.fire({
+      icon: 'success',
+      title: 'Logged in successfully!',
+      showConfirmButton: false,
+      timer: 3000, // 3 seconds
+    });
+  }else{
 
-import { auth } from "../../firebase";
-
-const Login = () => {
-  const navigate = useNavigate();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
-  const SubmitHandler = () => {
-    if (!email || !password) {
-      Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: 'Fill in all fields!',
-        showConfirmButton: false,
-        timer: 3000,
-      });
-      return;
-    }
-
-    signInWithEmailAndPassword(auth, email, password)
-      .then(() => {
-        Swal.fire({
-          icon: 'success',
-          title: 'Logged in successfully!',
-          showConfirmButton: false,
-          timer: 3000,
-        });
-        navigate("/Todo"); // Redirect to the desired page upon successful login
-      })
-      .catch((error) => {
-        Swal.fire({
-          icon: 'error',
-          title: 'Oops...',
-          text: error.message,
-          showConfirmButton: false,
-          timer: 3000,
-        });
-      });
-  };
+    Swal.fire({
+      icon: 'error',
+      title: 'Oops...',
+      showConfirmButton: false,
+      timer: 3000, // 3 seconds
+    });
+  }
+console.log(data)
+}
 
   return (
     <div>

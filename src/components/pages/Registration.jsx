@@ -1,125 +1,138 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import React, { useState } from 'react';
 import Swal from 'sweetalert2';
+import { useNavigate } from 'react-router-dom';
 
-import { auth } from "../../firebase";
+export const Registration = () => {
+  let navigate = useNavigate()
 
-const Registration = () => {
-  const navigate = useNavigate();
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [Phone, setPhone] = useState("");
-  const [password, setPassword] = useState("");
-  const [repeatPassword, setRepeatPassword] = useState("");
+  const [name, setName] = useState('');
+  const [phoneNo, setPhoneNo] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [repeatPassword, setRepeatPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
+  const handlePasswordChange = (event) => {
+    setPassword(event.target.value);
+  };
 
+  const handleRepeatPasswordChange = (event) => {
+    setRepeatPassword(event.target.value);
+  };
 
+  const handleSubmit = (event) => {
+    event.preventDefault();
 
+    if (password !== repeatPassword) {
+      setErrorMessage("Passwords don't match");
+      return;
+    }
+const data = {
+  password :password,
+  email:email,
+}
+navigate("/Login")
 
-  
+localStorage.setItem("data",JSON.stringify(data))
+Swal.fire({
+  icon: 'success',
+  title: 'Registration in successfully!',
+  showConfirmButton: false,
+  timer: 3000, // 3 seconds
+});
 
-    const SubmitHandler = () => {
-      if (!email || !password) {
-        Swal.fire({
-          icon: 'error',
-          title: 'Oops...',
-          text: 'Fill in all fields!',
-          showConfirmButton: false,
-          timer: 3000,
-        });
-        return;
-      }
+    // console.log('Name:', name);
+    // console.log('Phone Number:', phoneNo);
+    // console.log('Email:', email);
+    // console.log('Password:', password);
 
-
-
-
-
-    createUserWithEmailAndPassword(auth, email, password)
-      .then(async (res) => {
-        const user = res.user;
-        await updateProfile(user, {
-          displayName: name,
-        });
-
-        Swal.fire({
-          icon: 'success',
-          title: 'Registration successful!',
-          showConfirmButton: false,
-          timer: 3000,
-        });
-
-        // Redirect to the desired page upon successful registration
-        navigate("/Login");
-      })
-      .catch((error) => {
-        // Handle registration error
-      });
+    setErrorMessage('');
+    
   };
 
   return (
     <div>
-      <section class="vh-100">
-        <div class="container-fluid h-custom">
-          <div class="row d-flex justify-content-center align-items-center h-100">
-            <div class="col-md-9 col-lg-6 col-xl-5">
-              <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp"></img>
-            </div>
-            <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1 mb-4">
-              <form>
-                <div class="d-flex flex-row align-items-center justify-content-center justify-content-lg-start">
-                  <p class="lead fw-normal mb-0 me-3">User Registration</p>
-                </div>
-
-
-
-                <div class="form-outline mb-4">
-                  <input type="Name" id="Name" className="form-control" onChange={(e) => setName(e.target.value)} />
-                  <label className="form-label" htmlFor="Name">Name</label>
-
-                </div>
-
-                <div class="form-outline mb-3">
-                  <input type="Email" id="Email" className="form-control" onChange={(e) => setEmail(e.target.value)} />
-                  <label className="form-label" htmlFor="Password">Email</label>
-                </div>
-                <div class="form-outline mb-3">
-                  <input type="Phone" id="Phone" className="form-control" onChange={(e) => setPhone(e.target.value)} />
-                  <label className="form-label" htmlFor="Phone">Phone</label>
-                </div>
-                <div class="form-outline mb-3">
-                  <input type="password" id="Password" className="form-control" onChange={(e) => setPassword(e.target.value)} />
-                  <label className="form-label" htmlFor="Password">Password</label>
-                </div>
-
-                <div class="form-outline mb-3">
-                  <input type="repeatPassword" id="repeatPassword" className="form-control" onChange={(e) => setPassword(e.target.value)} />
-                  <label className="form-label" htmlFor="Password">repeatPassword</label>
-                </div>
-
-                <div class="d-flex justify-content-between align-items-center">
-                  <div class="form-check mb-0">
-                    <input class="form-check-input me-2" type="checkbox" value="" id="form2Example3" />
-                    <label class="form-check-label" for="form2Example3">
-                      Remember me
-                    </label>
-                  </div>
-                </div>
-
-                <div class="text-center text-lg-start mt-4 pt-2">
-                  <button type="button" class="btn btn-primary btn-lg
-                padding-left: 2.5rem; padding-right: 2.5rem;"onClick={SubmitHandler}>Register</button>
-                  <p class="small fw-bold mt-2 pt-1 mb-0">Already account Then login? <a href="Login"
-                    class="link-danger">Login</a></p>
-                </div>
-
-              </form>
-            </div>
+      <form onSubmit={handleSubmit}>
+        <div className='container-sm'>
+          <div className="form-outline mb-4">
+          <label className="form-label" htmlFor="registerName">
+              Name
+            </label>
+            <input
+              type="text"
+              id="registerName"
+              className="form-control"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+            
+          </div>
+          <div className="form-outline mb-4">
+          <label className="form-label" htmlFor="registerEmail">
+              Email
+            </label>
+            <input
+              type="email"
+              id="registerEmail"
+              className="form-control"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            
+          </div>
+          <div className="form-outline mb-4">
+          <label className="form-label" htmlFor="registerPhone">
+              Phone Number
+            </label>
+            <input
+              type="tel"
+              id="registerPhone"
+              className="form-control"
+              value={phoneNo}
+              onChange={(e) => setPhoneNo(e.target.value)}
+            />
+            
+          </div>
+          <div className="form-outline mb-4">
+          <label className="form-label" htmlFor="registerPassword">
+              Password
+            </label>
+            <input
+              type="password"
+              id="registerPassword"
+              className="form-control"
+              value={password}
+              onChange={handlePasswordChange}
+            />
+            
+          </div>
+          <div className="form-outline mb-4">
+          <label className="form-label" htmlFor="registerRepeatPassword">
+              Repeat password
+            </label>
+            <input
+              type="password"
+              id="registerRepeatPassword"
+              className="form-control"
+              value={repeatPassword}
+              onChange={handleRepeatPasswordChange}
+            />
+            
+            {errorMessage && <p className="text-danger">{errorMessage}</p>}
+          </div>
+          <div className="text-center">
+            <button type="submit" className="btn btn-primary btn-block col-4">
+              Registration
+            </button>
+          </div>
+          <div className="text-center">
+            <p>
+              Already a member? <a href="Login">Login</a>
+            </p>
           </div>
         </div>
-      </section>
+      </form>
     </div>
   );
 };
-
 export default Registration;
