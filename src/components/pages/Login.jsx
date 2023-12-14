@@ -22,7 +22,7 @@ const SubmitHandler =()=>{
 
   if (data.email == localStorageData.email && data.password == localStorageData.password){
     // navigate to movies page 
-    navigate("/Movies")
+    navigate("/Todo")
 
 
     Swal.fire({
